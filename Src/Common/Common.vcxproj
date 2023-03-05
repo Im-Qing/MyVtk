@@ -94,6 +94,10 @@ copy "$(OutDir)$(TargetName).dll" ..\..\Bin</Command>
       <OutputFile>$(OutDir)\$(ProjectName).dll</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).lib" ..\..\Lib
+copy "$(OutDir)$(TargetName).dll" ..\..\Bin</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="common_global.h" />

@@ -5,4 +5,9 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerEnvironment>PATH=%PATH%;$(QtDllPath);$(SolutionDir)3rdparty\Vtk-8.2.0\bin</LocalDebuggerEnvironment>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LocalDebuggerEnvironment>PATH=%PATH%;$(QtDllPath);$(SolutionDir)3rdparty\Vtk-8.2.0\bin</LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)Bin</LocalDebuggerWorkingDirectory>
+  </PropertyGroup>
 </Project>

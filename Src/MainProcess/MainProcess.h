@@ -3,6 +3,8 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_MainProcess.h"
 
+#include "../VtkWrap/VtkWrap.h"
+
 class MainProcess : public QMainWindow
 {
 	Q_OBJECT
@@ -12,4 +14,5 @@ public:
 
 private:
 	Ui::MainProcessClass ui;
+	MyVtk::VtkWrap::VtkWrap* m_pVtkWrap;
 };
