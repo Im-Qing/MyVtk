@@ -43,6 +43,11 @@
       </property>
       <item>
        <property name="text">
+        <string>test</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>使用几何结构+拓扑结构+属性数据</string>
        </property>
       </item>

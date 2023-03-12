@@ -28,7 +28,42 @@ void VtkDemoWidget::onListItemClicked(QListWidgetItem* item)
 
 	switch (index)
 	{
-	case 0:		//使用几何结构+拓扑结构+属性数据
+	case 0:
+	{
+		//生成文件序列组名
+		vtkSmartPointer <vtkStringArray> fileArray = vtkSmartPointer <vtkStringArray>::New();
+		char fileName[128];
+		for (int i = 1; i <= 3; i++)
+		{
+			sprintf(fileName, "Data/Images/%03d.jpg", i);
+			fileArray->InsertNextValue(std::string(fileName));
+		}
+		//读取JPG序列图像
+		vtkSmartPointer <vtkJPEGReader> reader = vtkSmartPointer <vtkJPEGReader>::New();
+		reader->SetFileNames(fileArray);
+		reader->Update();
+
+		//显示
+		vtkSmartPointer<vtkImageViewer2> viewer = vtkSmartPointer<vtkImageViewer2>::New();
+		viewer->SetInputConnection(reader->GetOutputPort());
+		vtkSmartPointer<vtkRenderWindowInteractor> interact = vtkSmartPointer<vtkRenderWindowInteractor>::New();
+		//默认选择第50张切片
+		viewer->SetSlice(2);
+		//viewer->SetSliceOrientationToXY();
+		//viewer->SetSliceOrientationToXZ();
+		viewer->SetSliceOrientationToYZ();
+		viewer->SetupInteractor(interact);
+		viewer->Render();
+
+		interact->Start();
+
+		////writer
+		//vtkSmartPointer<vtkPNGWriter> writer = vtkSmartPointer<vtkPNGWriter>::New();
+		//writer->SetFileName("Data/Images/wukong.png");
+		//writer->SetInputConnection(reader->GetOutputPort());
+		//writer->Write();
+	}break;
+	case 1:		//使用几何结构+拓扑结构+属性数据
 	{
 		/***** 几何结构 *****/
 		vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
@@ -85,7 +120,7 @@ void VtkDemoWidget::onListItemClicked(QListWidgetItem* item)
 		/******* render *******/
 		m_pRenderer->AddActor(pActor);
 	}break;
-	case 1:		//使用vtk......Source系列数据源
+	case 2:		//使用vtk......Source系列数据源
 	{
 		/******* source *******/
 		vtkSmartPointer<vtkSphereSource> pSource = vtkSmartPointer<vtkSphereSource>::New();

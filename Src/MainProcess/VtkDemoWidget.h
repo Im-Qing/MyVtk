@@ -33,6 +33,9 @@
 #include "vtkPolygon.h"
 #include "vtkTriangle.h"
 #include "vtkCamera.h"
+#include "vtkPNGWriter.h"
+#include "vtkJPEGReader.h"
+#include "vtkImageViewer2.h"
 VTK_MODULE_INIT(vtkRenderingOpenGL2);     // VTK was built with vtkRenderingOpenGL2
 VTK_MODULE_INIT(vtkInteractionStyle);
 VTK_MODULE_INIT(vtkRenderingFreeType);    // Build with vtkTextActor
