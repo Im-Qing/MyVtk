@@ -4,7 +4,10 @@ MainProcess::MainProcess(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+	resize(1300, 700);
 
-	m_pVtkWrap = new MyVtk::VtkWrap::VtkWrap();
-	ui.gridLayout->addWidget(m_pVtkWrap->test());
+	//Demo
+	m_pVtkDemoWidget = new VtkDemoWidget(this);
+	ui.gridLayout_2->addWidget(m_pVtkDemoWidget);
 }
+

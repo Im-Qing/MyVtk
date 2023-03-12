@@ -31,14 +31,23 @@
     <ClCompile Include="MainProcess.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VtkDemoWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainProcess.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="VtkDemoWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="MainProcess.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="VtkDemoWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

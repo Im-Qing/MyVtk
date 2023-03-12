@@ -1,7 +1,12 @@
 #pragma once
 
-#include "vtkwrap_global.h"
+#include <QWidget>
+#include <QDebug>
+#include <QListWidget>
 
+#include "ui_VtkDemoWidget.h"
+
+//vtk
 #include "QVTKOpenGLWidget.h"
 #include "vtkChartXY.h"
 #include "vtkContextScene.h"
@@ -22,21 +27,29 @@
 #include "vtkPolyDataMapper.h"
 #include "vtkProperty.h"
 #include "vtkAutoInit.h" 
+#include "vtkLine.h"
+#include "vtkPointData.h"
+#include "vtkCellData.h"
+#include "vtkPolygon.h"
+#include "vtkTriangle.h"
+#include "vtkCamera.h"
 VTK_MODULE_INIT(vtkRenderingOpenGL2);     // VTK was built with vtkRenderingOpenGL2
 VTK_MODULE_INIT(vtkInteractionStyle);
 VTK_MODULE_INIT(vtkRenderingFreeType);    // Build with vtkTextActor
 VTK_MODULE_INIT(vtkRenderingContextOpenGL2)
 
-MYVTK_NAMESPACE_BEGIN
-VTKWRAP_NAMESPACE_BEGIN
-
-class VTKWRAP_EXPORT VtkWrap
+class VtkDemoWidget : public QWidget
 {
-public:
-	VtkWrap();
-private:
-	
-};
+	Q_OBJECT
 
-VTKWRAP_NAMESPACE_END
-MYVTK_NAMESPACE_END
+public:
+	VtkDemoWidget(QWidget *parent = Q_NULLPTR);
+	~VtkDemoWidget();
+public slots:
+	void onListItemClicked(QListWidgetItem* item);
+private:
+	Ui::VtkDemoWidget ui;
+	QVTKOpenGLWidget* m_pVTKOpenGLWidget{nullptr};
+	vtkSmartPointer<vtkGenericOpenGLRenderWindow> m_pRenderwindow{nullptr};
+	vtkSmartPointer<vtkRenderer> m_pRenderer{nullptr};
+};

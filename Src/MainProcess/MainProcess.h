@@ -1,9 +1,10 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+
 #include "ui_MainProcess.h"
 
-#include "../VtkWrap/VtkWrap.h"
+#include "VtkDemoWidget.h"
 
 class MainProcess : public QMainWindow
 {
@@ -11,8 +12,7 @@ class MainProcess : public QMainWindow
 
 public:
 	MainProcess(QWidget *parent = Q_NULLPTR);
-
 private:
 	Ui::MainProcessClass ui;
-	MyVtk::VtkWrap::VtkWrap* m_pVtkWrap;
+	VtkDemoWidget* m_pVtkDemoWidget{nullptr};
 };
