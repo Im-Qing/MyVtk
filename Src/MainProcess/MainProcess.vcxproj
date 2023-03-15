@@ -85,14 +85,15 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\Vtk-8.2.0\include\vtk-8.2;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\ITK-5.3.0\include\ITK-5.3;$(SolutionDir)3rdparty\VTK-8.2.0\include\vtk-8.2;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>ITK_IO_FACTORY_REGISTER_MANAGER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)3rdparty\Vtk-8.2.0\lib\*.lib;$(SolutionDir)Lib\*.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)3rdparty\ITK-5.3.0\lib\*.lib;$(SolutionDir)3rdparty\Vtk-8.2.0\lib\*.lib;$(SolutionDir)Lib\*.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(OutDir)$(TargetName).exe" ..\..\Bin</Command>

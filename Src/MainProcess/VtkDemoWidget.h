@@ -41,6 +41,11 @@ VTK_MODULE_INIT(vtkInteractionStyle);
 VTK_MODULE_INIT(vtkRenderingFreeType);    // Build with vtkTextActor
 VTK_MODULE_INIT(vtkRenderingContextOpenGL2)
 
+//itk
+#include "itkImage.h"
+#include "itkImageFileReader.h"
+#include "itkImageToVTKImageFilter.h"
+
 class VtkDemoWidget : public QWidget
 {
 	Q_OBJECT

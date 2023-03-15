@@ -56,6 +56,16 @@
         <string>使用vtk......Source系列数据源</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>读取、显示、保存图片</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>读取CT DCM</string>
+       </property>
+      </item>
      </widget>
      <widget class="QWidget" name="widget" native="true">
       <layout class="QGridLayout" name="gridLayout_2">
