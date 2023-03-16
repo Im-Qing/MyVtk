@@ -146,38 +146,86 @@ void VtkDemoWidget::onListItemClicked(QListWidgetItem* item)
 	}break;
 	case 4:		//读取CT DCM
 	{
-		using PixelType = unsigned int;
-		using ImageType = itk::Image<PixelType, 3>;
-		using ImageReader = itk::ImageFileReader<ImageType>;
-		ImageReader::Pointer reader = ImageReader::New();
-		// 此处是我 CT Dicom 文件的路径，请根据实际情况修改
-		reader->SetFileName("Data/Dcm/series-000001/image-000001.dcm");
-		reader->Update();
-		ImageType::Pointer image = reader->GetOutput();
-		// 到此处，使用 ITK 读取 dicom 文件已经结束
+		using PixelType = float;
+		constexpr unsigned int Dimension = 3;
+		using ImageType = itk::Image< PixelType, Dimension >;
+		using ReaderType = itk::ImageSeriesReader< ImageType >;
+		using ImageIOType = itk::GDCMImageIO;
+		using NamesGeneratorType = itk::GDCMSeriesFileNames;
+		ReaderType::Pointer reader = ReaderType::New();
+		ImageIOType::Pointer dicomIO = ImageIOType::New();
+		reader->SetImageIO(dicomIO);
+		NamesGeneratorType::Pointer nameGenerator = NamesGeneratorType::New();
+		nameGenerator->SetUseSeriesDetails(true);
+		nameGenerator->SetDirectory("Data/Dcm/series-000001");
 
-		// 此处开始使用 VTK 显示读取的 CT 图像
-		using ConnectorType = itk::ImageToVTKImageFilter<ImageType>;  //VTK和ITK链接器
-		ConnectorType::Pointer connector = ConnectorType::New();
-		connector->SetInput(image);
-		connector->Update();
+		using SeriesIdContainer = std::vector< std::string >;
+		const SeriesIdContainer& seriesUID = nameGenerator->GetSeriesUIDs();
+		auto seriesItr = seriesUID.begin();
+		auto seriesEnd = seriesUID.end();
 
-		//vtkSmartPointer<vtkRenderWindowInteractor> interactor = vtkRenderWindowInteractor::New();
-		vtkSmartPointer<vtkImageViewer2> viewer = vtkSmartPointer<vtkImageViewer2>::New();
-		viewer->SetInputData(connector->GetOutput());
-		//viewer->SetupInteractor(interactor);
-		viewer->SetSize(800, 600);
-		viewer->SetColorWindow(255); //设置窗宽
-		viewer->SetColorLevel(500);   //设置窗位
-		viewer->SetSliceOrientationToXY();
-		viewer->SetSlice(1);
+		using FileNamesContainer = std::vector< std::string >;
+		FileNamesContainer fileNames;
+		std::string seriesIdentifier;
+		while (seriesItr != seriesEnd)
+		{
 
-		viewer->SetRenderWindow(m_pRenderwindow);
-		viewer->Render();
+			seriesIdentifier = seriesItr->c_str();
+			fileNames = nameGenerator->GetFileNames(seriesIdentifier);
+			++seriesItr;
+		}
+
+		reader->SetFileNames(fileNames);
+
+		try
+		{
+			reader->Update();
+		}
+		catch (itk::ExceptionObject& ex)
+		{
+			std::cout << ex << std::endl;
+		}
+		ImageType::SizeType imgSize = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
+		cout << "read done, Original size: " << imgSize << endl;
+
+		typedef itk::ImageToVTKImageFilter< ImageType> itkTovtkFilterType;
+		itkTovtkFilterType::Pointer itkTovtkImageFilter = itkTovtkFilterType::New();
+		itkTovtkImageFilter->SetInput(reader->GetOutput());
+		itkTovtkImageFilter->Update();
+
+		vtkSmartPointer<vtkMarchingCubes> vesselExtractor = vtkMarchingCubes::New();
+		vesselExtractor->SetInputData(itkTovtkImageFilter->GetOutput());
+		vesselExtractor->SetNumberOfContours(10);
+		vesselExtractor->SetValue(0, 1);   //轮廓
+
+		//将提取的等值面拼接成连续的
+		vtkSmartPointer<vtkStripper> vesselStripper = vtkStripper::New();                           //建立三角带对象
+		vesselStripper->SetInputConnection(vesselExtractor->GetOutputPort());
 
 
-		//interactor->Initialize();
-		//interactor->Start();
+		vtkSmartPointer<vtkPolyDataMapper>  vesselMapper = vtkPolyDataMapper::New();     //建立一个数据映射对象
+		vesselMapper->SetInputConnection(vesselStripper->GetOutputPort());                     //将三角带映射为几何数据
+		vesselMapper->SetScalarRange(0, 7);
+
+		//对象和对象属性等设置
+		vtkSmartPointer<vtkActor> vessel = vtkActor::New();
+		vessel->SetMapper(vesselMapper);
+		vessel->GetProperty()->SetColor(0, 0, 1);
+
+		// A renderer and render window
+		vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
+		vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+		renderWindow->AddRenderer(renderer);
+		renderWindow->SetSize(1000, 1000);
+		renderer->AddActor(vessel);
+
+		// An interactor
+		vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =
+			vtkSmartPointer<vtkRenderWindowInteractor>::New();
+		renderWindowInteractor->SetRenderWindow(m_pRenderwindow);
+		renderWindow->Render();
+		renderWindowInteractor->Initialize();
+		renderWindowInteractor->Start();
 	}break;
 	default:
 		break;

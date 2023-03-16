@@ -36,6 +36,8 @@
 #include "vtkPNGWriter.h"
 #include "vtkJPEGReader.h"
 #include "vtkImageViewer2.h"
+#include "vtkStripper.h"
+#include "vtkMarchingCubes.h"
 VTK_MODULE_INIT(vtkRenderingOpenGL2);     // VTK was built with vtkRenderingOpenGL2
 VTK_MODULE_INIT(vtkInteractionStyle);
 VTK_MODULE_INIT(vtkRenderingFreeType);    // Build with vtkTextActor
@@ -44,7 +46,10 @@ VTK_MODULE_INIT(vtkRenderingContextOpenGL2)
 //itk
 #include "itkImage.h"
 #include "itkImageFileReader.h"
+#include "itkGDCMImageIO.h"
 #include "itkImageToVTKImageFilter.h"
+#include "itkImageSeriesReader.h"		//用于读取图像序列
+#include "itkGDCMSeriesFileNames.h"		//用于读取序列文件名
 
 class VtkDemoWidget : public QWidget
 {
